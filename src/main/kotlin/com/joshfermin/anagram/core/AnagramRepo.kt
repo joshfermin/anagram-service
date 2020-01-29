@@ -7,5 +7,5 @@ import java.util.UUID
 
 @Repository
 interface AnagramRepo: JpaRepository<AnagramWord, UUID> {
-    fun findAllByAnagramHashEquals(anagramHash: String): List<AnagramWord>
+    fun findAllByAnagramHashEqualsAndWordIsNot(anagramHash: String, word: String): List<AnagramWord>
 }

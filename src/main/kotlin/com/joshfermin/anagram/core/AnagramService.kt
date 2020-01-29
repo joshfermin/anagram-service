@@ -18,6 +18,6 @@ class AnagramService(private val anagramRepo: AnagramRepo) {
     }
 
     fun findAnagramsForWord(word: String): List<AnagramWord> {
-        return anagramRepo.findAllByAnagramHashEquals(word.sortByCharsAsc())
+        return anagramRepo.findAllByAnagramHashEqualsAndWordIsNot(word.sortByCharsAsc(), word)
     }
 }

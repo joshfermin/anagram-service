@@ -3,6 +3,7 @@ package com.joshfermin.anagram.core
 import com.joshfermin.anagram.models.AnagramResponse
 import com.joshfermin.anagram.models.AnagramUploadRequest
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -21,7 +22,8 @@ class AnagramController(
     }
 
     @GetMapping("/anagrams/{word}.json")
-    fun getAnagrams(@PathVariable word: String): AnagramResponse {
-        return AnagramResponse(anagramService.findAnagramsForWord(word).map { it.word })
+    fun getAnagrams(@PathVariable word: String): ResponseEntity<AnagramResponse> {
+        val response = AnagramResponse(anagramService.findAnagramsForWord(word).map { it.word })
+        return ResponseEntity.ok(response)
     }
 }
