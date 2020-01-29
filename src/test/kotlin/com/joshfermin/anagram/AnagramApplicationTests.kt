@@ -2,12 +2,17 @@ package com.joshfermin.anagram
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.web.server.LocalServerPort
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class AnagramApplicationTests {
 
+	@LocalServerPort
+	var port: Int = 0
+
 	@Test
-	fun contextLoads() {
+	fun `can upload words and retrieve all anagrams of a given word`() {
+
 	}
 
 }
