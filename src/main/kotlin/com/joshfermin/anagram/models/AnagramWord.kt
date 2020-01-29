@@ -9,11 +9,12 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "anagram_words", indexes = [
-    Index(name = "anagram_hash_ndx", columnList = "anagram_hash")
+    Index(name = "anagram_hash_ndx", columnList = "anagram_hash"),
+    Index(name = "word_ndx", columnList = "word")
 ])
 data class AnagramWord(
     @Id val id: UUID,
-    val word: String,
+    @Column(name = "word") val word: String,
     @Column(name = "anagram_hash") val anagramHash: String,
     val length: Int
 ) {

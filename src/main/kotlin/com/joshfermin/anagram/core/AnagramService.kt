@@ -17,7 +17,7 @@ class AnagramService(private val anagramRepo: AnagramRepo) {
         return anagramRepo.saveAll(anagramWords)
     }
 
-    fun findAnagramsForWord(word: String): List<AnagramWord> {
-        return anagramRepo.findAllByAnagramHashEqualsAndWordIsNot(word.sortByCharsAsc(), word)
+    fun findAnagramsForWord(word: String, limit: Int): List<AnagramWord> {
+        return anagramRepo.findMatchingAnagrams(word.sortByCharsAsc(), word, limit)
     }
 }

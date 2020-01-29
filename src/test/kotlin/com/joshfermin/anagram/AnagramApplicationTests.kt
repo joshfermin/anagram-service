@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.test.web.client.postForEntity
-import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.http.HttpStatus
-import org.springframework.test.context.junit4.SpringRunner
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class AnagramApplicationTests {
@@ -23,17 +21,25 @@ class AnagramApplicationTests {
 		val createResp = restTemplate
 			.postForEntity<String>(
 				"/words.json",
-				AnagramUploadRequest(listOf("read", "dear", "dare", "dog", "god"))
+				AnagramUploadRequest(listOf("read", "dear", "dare", "dog", "god", "lake", "leak", "kale"))
 			)
 		assertThat(createResp.statusCode).isEqualTo(HttpStatus.CREATED)
 
-		val getResp = restTemplate
+		val getReadResp = restTemplate
 			.getForEntity(
-				"/anagrams/read.json",
-					AnagramResponse::class.java
+			"/anagrams/read.json",
+				AnagramResponse::class.java
 			)
-		assertThat(getResp.statusCode).isEqualTo(HttpStatus.OK)
-		assertThat(getResp.body!!.anagrams).containsExactlyInAnyOrder("dear", "dare")
+		assertThat(getReadResp.statusCode).isEqualTo(HttpStatus.OK)
+		assertThat(getReadResp.body!!.anagrams).containsExactlyInAnyOrder("dear", "dare")
+
+		val getLakeResp = restTemplate
+			.getForEntity(
+				"/anagrams/lake.json?limit=1",
+				AnagramResponse::class.java
+			)
+		assertThat(getLakeResp.statusCode).isEqualTo(HttpStatus.OK)
+		assertThat(getLakeResp.body!!.anagrams).containsExactlyInAnyOrder("kale")
 	}
 
 }
