@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository
 import java.util.UUID
 
 @Repository
-interface AnagramRepo: JpaRepository<AnagramWord, UUID>
+interface AnagramRepo: JpaRepository<AnagramWord, UUID> {
+    fun findAllByAnagramHashEquals(anagramHash: String): List<AnagramWord>
+}
