@@ -1,3 +1,3 @@
-package com.joshfermin.anagram.api
+package com.joshfermin.anagram.models
 
 data class AnagramUploadRequest(val words: List<String>)

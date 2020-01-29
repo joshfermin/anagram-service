@@ -1,4 +1,4 @@
-package com.joshfermin.anagram.api
+package com.joshfermin.anagram.models
 
 import java.util.UUID
 import javax.persistence.Entity

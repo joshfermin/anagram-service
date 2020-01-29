@@ -1,4 +1,4 @@
-package com.joshfermin.anagram.api
+package com.joshfermin.anagram.core
 
 import org.springframework.stereotype.Service
 
