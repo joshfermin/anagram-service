@@ -8,14 +8,11 @@ import javax.persistence.Index
 import javax.persistence.Table
 
 @Entity
-@Table(name = "anagram_words", indexes = [
-    Index(name = "anagram_hash_ndx", columnList = "anagram_hash"),
-    Index(name = "word_ndx", columnList = "word")
-])
+@Table(name = "anagram_words")
 data class AnagramWord(
     @Id val id: UUID,
-    @Column(name = "word") val word: String,
-    @Column(name = "anagram_hash") val anagramHash: String,
+    val word: String,
+    val anagramHash: String,
     val length: Int
 ) {
     constructor(): this(UUID.randomUUID(), "", "", 0)

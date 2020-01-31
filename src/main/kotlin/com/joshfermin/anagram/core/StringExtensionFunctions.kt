@@ -1,3 +1,3 @@
 package com.joshfermin.anagram.core
 
-fun String.sortByCharsAsc(): String = this.toCharArray().sorted().joinToString("")
+fun String.sortByCharsAsc(): String = this.toLowerCase().toCharArray().sorted().joinToString("")

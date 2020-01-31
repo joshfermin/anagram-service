@@ -13,4 +13,6 @@ interface AnagramRepo: JpaRepository<AnagramWord, UUID> {
         value = "SELECT * FROM anagram_words WHERE anagram_hash = :anagramHash AND word != :word ORDER BY word LIMIT :limit "
     )
     fun findMatchingAnagrams(anagramHash: String, word: String, limit: Int): List<AnagramWord>
+
+    fun findAllByWordIn(word: List<String>): List<AnagramWord>
 }
