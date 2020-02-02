@@ -23,4 +23,14 @@ class AnagramService(private val anagramRepo: AnagramRepo) {
     fun findAnagramsForWord(word: String, limit: Int): List<AnagramWord> {
         return anagramRepo.findMatchingAnagrams(word.sortByCharsAsc(), word, limit)
     }
+
+    @Transactional
+    fun deleteWord(word: String) {
+        return anagramRepo.deleteByWord(word)
+    }
+
+    @Transactional
+    fun deleteAll() {
+        return anagramRepo.deleteAllAnagrams()
+    }
 }

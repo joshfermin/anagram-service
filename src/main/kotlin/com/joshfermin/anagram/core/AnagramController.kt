@@ -6,6 +6,7 @@ import org.hibernate.exception.ConstraintViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -27,5 +28,17 @@ class AnagramController(
     fun getAnagrams(@PathVariable word: String, @RequestParam(required = false, defaultValue = "1000") limit: Int): ResponseEntity<AnagramResponse> {
         val response = AnagramResponse(anagramService.findAnagramsForWord(word, limit).map { it.word })
         return ResponseEntity.ok(response)
+    }
+
+    @DeleteMapping("/words/{word}.json")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun deleteAnagramWord(@PathVariable word: String) {
+        anagramService.deleteWord(word)
+    }
+
+    @DeleteMapping("/words.json")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun deleteAllAnagramWords() {
+        anagramService.deleteAll()
     }
 }
