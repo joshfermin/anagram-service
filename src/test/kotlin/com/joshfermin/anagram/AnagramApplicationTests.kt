@@ -5,10 +5,7 @@ import com.joshfermin.anagram.models.AnagramUploadRequest
 import org.assertj.core.api.Assertions.assertThat
 import org.flywaydb.core.Flyway
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.MethodOrderer
-import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestMethodOrder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
@@ -132,5 +129,28 @@ class AnagramApplicationTests {
         assertThat(get.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(get.body!!.anagrams.size).isEqualTo(31)
         assertThat(get.body!!.anagrams).containsAnyOf("easter", "lapse", "organ")
+    }
+
+    @Test
+    fun `delete a word and all of its anagrams`() {
+        var getReadResp = restTemplate
+            .getForEntity(
+                "/anagrams/dear.json",
+                AnagramResponse::class.java
+            )
+        assertThat(getReadResp.statusCode).isEqualTo(HttpStatus.OK)
+        assertThat(getReadResp.body!!.anagrams.size).isEqualTo(4)
+
+        val deleteResponse = restTemplate
+            .exchange<String>("/words/read.json?deleteAllAnagrams=true", HttpMethod.DELETE, HttpEntity.EMPTY, String::class)
+        assertThat(deleteResponse.statusCode).isEqualTo(HttpStatus.NO_CONTENT)
+
+        getReadResp = restTemplate
+            .getForEntity(
+                "/anagrams/dear.json",
+                AnagramResponse::class.java
+            )
+        assertThat(getReadResp.statusCode).isEqualTo(HttpStatus.OK)
+        assertThat(getReadResp.body!!.anagrams.size).isEqualTo(0)
     }
 }

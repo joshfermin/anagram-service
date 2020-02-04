@@ -2,7 +2,6 @@ package com.joshfermin.anagram.core
 
 import com.joshfermin.anagram.models.AnagramResponse
 import com.joshfermin.anagram.models.AnagramUploadRequest
-import org.hibernate.exception.ConstraintViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
@@ -32,8 +31,8 @@ class AnagramController(
 
     @DeleteMapping("/words/{word}.json")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun deleteAnagramWord(@PathVariable word: String) {
-        anagramService.deleteWord(word)
+    fun deleteAnagramWord(@PathVariable word: String, @RequestParam(required = false, defaultValue = "false") deleteAllAnagrams: Boolean) {
+        anagramService.deleteWord(word, deleteAllAnagrams)
     }
 
     @DeleteMapping("/words.json")

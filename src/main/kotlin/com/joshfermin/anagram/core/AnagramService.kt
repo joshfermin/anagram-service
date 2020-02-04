@@ -26,8 +26,14 @@ class AnagramService(private val anagramRepo: AnagramRepo) {
     }
 
     @Transactional
-    fun deleteWord(word: String) {
-        return anagramRepo.deleteByWord(word)
+    fun deleteWord(word: String, deleteAllAnagrams: Boolean) {
+        return when(deleteAllAnagrams) {
+            true -> {
+                val wordsToDelete = anagramRepo.findAllByAnagramHash(word.sortByCharsAsc())
+                wordsToDelete.forEach { anagramRepo.deleteByWord(it.word) }
+            }
+            false -> anagramRepo.deleteByWord(word)
+        }
     }
 
     @Transactional

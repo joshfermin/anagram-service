@@ -19,12 +19,12 @@ The API you design should respond on the following endpoints as specified.
 
 
 **Optional**
-- Endpoint that returns a count of words in the corpus and min/max/median/average word length
-- Respect a query param for whether or not to include proper nouns in the list of anagrams
-- Endpoint that identifies words with the most anagrams
-- Endpoint that takes a set of words and returns whether or not they are all anagrams of each other
-- Endpoint to return all anagram groups of size >= *x*
-- Endpoint to delete a word *and all of its anagrams*
+- [ ] Endpoint that returns a count of words in the corpus and min/max/median/average word length
+- [ ] Respect a query param for whether or not to include proper nouns in the list of anagrams
+- [x] Endpoint that identifies words with the most anagrams
+- [ ] Endpoint that takes a set of words and returns whether or not they are all anagrams of each other
+- [x] Endpoint to return all anagram groups of size >= *x*
+- [x] Endpoint to delete a word *and all of its anagrams*
 
 Clients will interact with the API over HTTP, and all data sent and received is expected to be in JSON format
 
@@ -111,6 +111,8 @@ Suggestions for documentation topics include:
 
 #### Future Features
 - Features you think would be useful to add to the API
+- Performance testing
+- Automated build process
 
 #### Implementation Details
 - Currently using a H2 in memory db but can easily be swapped for any other relational one via environment configuration.
@@ -123,6 +125,7 @@ anagram words. Then it populates that table with the given dictionary of words.
 
 #### Edge Cases
 - Any edge cases you find while working on the project
+- Proper nouns, words with uppercase vs lowercase, to solve for this just lowercase the hash
 
 #### Design Overview
 - The way anagrams are identified is through sorting them by their characters and then
@@ -132,7 +135,7 @@ key stored as `dgo`)
 "hash" operation in the db
 
 
-# Deliverable
+Deliverable
 ---
 
 Please provide the code for the assignment either in a private repository (GitHub or Bitbucket) or as a zip file. If you have a deliverable that is deployed on the web please provide a link, otherwise give us instructions for running it locally.
