@@ -47,4 +47,12 @@ class AnagramController(
         val response = AnagramResponse(anagramService.findWordsWithMostAnagrams().map { it.word })
         return ResponseEntity.ok(response)
     }
+
+    @GetMapping("/anagrams/groups")
+    fun getWordsWithAnagramGroupSize(@RequestParam(required = false, defaultValue = "7") groupSize: Int): ResponseEntity<AnagramResponse> {
+        // TODO: can probably clean this up by creating another response class with { groups: {'<anagram hash>': [<words>] } }
+        // TODO: add limit to response
+        val response = AnagramResponse(anagramService.findWordsWithAnagramGroupSize(groupSize).map { it.word })
+        return ResponseEntity.ok(response)
+    }
 }

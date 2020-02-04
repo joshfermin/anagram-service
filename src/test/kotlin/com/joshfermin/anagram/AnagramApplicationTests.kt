@@ -120,4 +120,17 @@ class AnagramApplicationTests {
         assertThat(getResponse.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(getResponse.body!!.anagrams.size).isEqualTo(11)
     }
+
+    @Test
+    fun `can retrieve anagram groups of size greater than or equal to x`() {
+        val get = restTemplate
+            .getForEntity(
+                "/anagrams/groups?groupSize=10",
+                AnagramResponse::class.java
+            )
+
+        assertThat(get.statusCode).isEqualTo(HttpStatus.OK)
+        assertThat(get.body!!.anagrams.size).isEqualTo(31)
+        assertThat(get.body!!.anagrams).containsAnyOf("easter", "lapse", "organ")
+    }
 }

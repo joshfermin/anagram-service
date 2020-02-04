@@ -39,4 +39,9 @@ class AnagramService(private val anagramRepo: AnagramRepo) {
         val anagramHash = anagramRepo.findAnagramWordsWithMostMatches()
         return anagramRepo.findAllByAnagramHash(anagramHash)
     }
+
+    fun findWordsWithAnagramGroupSize(groupSize: Int): List<AnagramWord> {
+        val anagramHashes = anagramRepo.findAnagramHashesByGroupSize(groupSize)
+        return anagramRepo.findAllByAnagramHashIn(anagramHashes)
+    }
 }
