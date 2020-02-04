@@ -17,6 +17,8 @@ interface AnagramRepo: JpaRepository<AnagramWord, UUID> {
 
     fun findAllByWordIn(word: List<String>): List<AnagramWord>
 
+    fun findAllByAnagramHash(anagramHash: String): List<AnagramWord>
+
     fun deleteByWord(word: String)
 
     @Modifying
@@ -25,4 +27,22 @@ interface AnagramRepo: JpaRepository<AnagramWord, UUID> {
         value = "DELETE FROM anagram_words"
     )
     fun deleteAllAnagrams()
+
+    @Query(
+        nativeQuery = true,
+        value = """
+            SELECT 
+                sub.anagram_hash
+            FROM
+                (SELECT 
+                    anagram_hash,
+                    count(*) as anagram_hash_count
+                FROM anagram_words
+                 GROUP BY anagram_hash
+                ORDER BY anagram_hash_count DESC
+                LIMIT 1
+                ) as sub
+        """
+    )
+    fun findAnagramWordsWithMostMatches(): String
 }

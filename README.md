@@ -109,11 +109,27 @@ Optionally, you can provide documentation that is useful to consumers and/or mai
 
 Suggestions for documentation topics include:
 
+#### Future Features
 - Features you think would be useful to add to the API
-- Implementation details (which data store you used, etc.)
-- Limits on the length of words that can be stored or limits on the number of results that will be returned
+
+#### Implementation Details
+- Currently using a H2 in memory db but can easily be swapped for any other relational one via environment configuration.
+- Using flyway to manage the migrations. The migrations that run initially create the table for the 
+anagram words. Then it populates that table with the given dictionary of words.
+
+#### Limit
+- There is currently a hard limit of `1000` on the number of results returned
+- There is also a limit of `100` on the max length of a word 
+
+#### Edge Cases
 - Any edge cases you find while working on the project
-- Design overview and trade-offs you considered
+
+#### Design Overview
+- The way anagrams are identified is through sorting them by their characters and then
+using that as a key to find similar anagrams (`dog` and `god` will both have the same
+key stored as `dgo`)
+- Sorting the letters is a costly operation so we sort them once and then save that
+"hash" operation in the db
 
 
 # Deliverable

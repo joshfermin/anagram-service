@@ -41,4 +41,10 @@ class AnagramController(
     fun deleteAllAnagramWords() {
         anagramService.deleteAll()
     }
+
+    @GetMapping("/anagrams/top")
+    fun getWordsWithMostAnagrams(@RequestParam(required = false, defaultValue = "10") limit: Int): ResponseEntity<AnagramResponse> {
+        val response = AnagramResponse(anagramService.findWordsWithMostAnagrams().map { it.word })
+        return ResponseEntity.ok(response)
+    }
 }

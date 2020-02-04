@@ -3,7 +3,12 @@ package com.joshfermin.anagram
 import com.joshfermin.anagram.models.AnagramResponse
 import com.joshfermin.anagram.models.AnagramUploadRequest
 import org.assertj.core.api.Assertions.assertThat
+import org.flywaydb.core.Flyway
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.MethodOrderer
+import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestMethodOrder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
@@ -18,6 +23,15 @@ class AnagramApplicationTests {
 
     @Autowired
     private lateinit var restTemplate: TestRestTemplate
+
+    @Autowired
+    lateinit var flyway: Flyway
+
+    @BeforeEach
+    internal fun setup() {
+        flyway.clean()
+        flyway.migrate()
+    }
 
     @Test
     fun `can retrieve all anagrams of a given word`() {
@@ -93,5 +107,17 @@ class AnagramApplicationTests {
             )
         assertThat(getReadResp.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(getReadResp.body!!.anagrams.size).isEqualTo(1)
+    }
+
+    @Test
+    fun `can retrieve words with most anagrams`() {
+        val getResponse = restTemplate
+            .getForEntity(
+                "/anagrams/top",
+                AnagramResponse::class.java
+            )
+
+        assertThat(getResponse.statusCode).isEqualTo(HttpStatus.OK)
+        assertThat(getResponse.body!!.anagrams.size).isEqualTo(11)
     }
 }
