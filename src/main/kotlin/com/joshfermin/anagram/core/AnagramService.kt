@@ -1,5 +1,6 @@
 package com.joshfermin.anagram.core
 
+import com.joshfermin.anagram.models.AnagramRequest
 import com.joshfermin.anagram.models.AnagramWord
 import org.springframework.stereotype.Service
 import java.util.UUID
@@ -49,5 +50,18 @@ class AnagramService(private val anagramRepo: AnagramRepo) {
     fun findWordsWithAnagramGroupSize(groupSize: Int): List<AnagramWord> {
         val anagramHashes = anagramRepo.findAnagramHashesByGroupSize(groupSize)
         return anagramRepo.findAllByAnagramHashIn(anagramHashes)
+    }
+
+    fun validateWordsAreAnagrams(anagramWords: AnagramRequest): Boolean {
+        if (anagramWords.words.isEmpty()) return true
+
+        val uniqueAnagrams = mutableSetOf<String>()
+
+        anagramWords.words.forEach {
+            uniqueAnagrams.add(it.sortByCharsAsc())
+            if (uniqueAnagrams.size > 1) return false
+        }
+
+        return true
     }
 }

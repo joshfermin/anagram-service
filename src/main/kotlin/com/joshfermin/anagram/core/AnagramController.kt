@@ -1,7 +1,8 @@
 package com.joshfermin.anagram.core
 
 import com.joshfermin.anagram.models.AnagramResponse
-import com.joshfermin.anagram.models.AnagramUploadRequest
+import com.joshfermin.anagram.models.AnagramRequest
+import com.joshfermin.anagram.models.ValidAnagramResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
@@ -19,7 +20,7 @@ class AnagramController(
 ) {
     @PostMapping("/words.json")
     @ResponseStatus(HttpStatus.CREATED)
-    fun uploadWords(@RequestBody body: AnagramUploadRequest) {
+    fun uploadWords(@RequestBody body: AnagramRequest) {
         anagramService.upload(body.words)
     }
 
@@ -52,6 +53,12 @@ class AnagramController(
         // TODO: can probably clean this up by creating another response class with { groups: {'<anagram hash>': [<words>] } }
         // TODO: add limit to response
         val response = AnagramResponse(anagramService.findWordsWithAnagramGroupSize(groupSize).map { it.word })
+        return ResponseEntity.ok(response)
+    }
+
+    @PostMapping("/anagrams/validate")
+    fun areAllWordsAnagramsOfEachOther(@RequestBody anagramWords: AnagramRequest): ResponseEntity<ValidAnagramResponse> {
+        val response = ValidAnagramResponse(anagramService.validateWordsAreAnagrams(anagramWords))
         return ResponseEntity.ok(response)
     }
 }

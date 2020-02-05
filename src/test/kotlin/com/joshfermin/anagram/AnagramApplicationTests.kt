@@ -1,7 +1,8 @@
 package com.joshfermin.anagram
 
 import com.joshfermin.anagram.models.AnagramResponse
-import com.joshfermin.anagram.models.AnagramUploadRequest
+import com.joshfermin.anagram.models.AnagramRequest
+import com.joshfermin.anagram.models.ValidAnagramResponse
 import org.assertj.core.api.Assertions.assertThat
 import org.flywaydb.core.Flyway
 import org.junit.jupiter.api.BeforeEach
@@ -35,7 +36,7 @@ class AnagramApplicationTests {
         val createResp = restTemplate
             .postForEntity<String>(
                 "/words.json",
-                AnagramUploadRequest(listOf("read", "dear", "dare", "dog", "god", "lake", "leak", "kale"))
+                AnagramRequest(listOf("read", "dear", "dare", "dog", "god", "lake", "leak", "kale"))
             )
         assertThat(createResp.statusCode).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY)
         assertThat(createResp.body!!).containsSequence("{\"error\":\"The following words: 'dare, dear, dog, god, kale, lake, leak, read' already exists in the data store\"}")
@@ -81,7 +82,7 @@ class AnagramApplicationTests {
         val createResp = restTemplate
             .postForEntity<String>(
                 "/words.json",
-                AnagramUploadRequest(listOf("read", "dear", "dare", "dog", "god", "lake", "leak", "kale"))
+                AnagramRequest(listOf("read", "dear", "dare", "dog", "god", "lake", "leak", "kale"))
             )
         assertThat(createResp.statusCode).isEqualTo(HttpStatus.CREATED)
 
@@ -152,5 +153,25 @@ class AnagramApplicationTests {
             )
         assertThat(getReadResp.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(getReadResp.body!!.anagrams.size).isEqualTo(0)
+    }
+
+    @Test
+    fun `validates passed in words are anagrams of each other`() {
+        var resp = restTemplate
+            .postForEntity<ValidAnagramResponse>(
+                "/anagrams/validate",
+                AnagramRequest(listOf("read", "dear", "dare", "dog"))
+            )
+        assertThat(resp.statusCode).isEqualTo(HttpStatus.OK)
+        assertThat(resp.body!!.valid).isEqualTo(false)
+
+        resp = restTemplate
+            .postForEntity(
+                "/anagrams/validate",
+                AnagramRequest(listOf("read", "dear", "dare"))
+            )
+
+        assertThat(resp.statusCode).isEqualTo(HttpStatus.OK)
+        assertThat(resp.body!!.valid).isEqualTo(true)
     }
 }
