@@ -1,4 +1,4 @@
-package com.joshfermin.anagram.core
+package com.joshfermin.anagram.security
 
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -9,15 +9,15 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 
 @ControllerAdvice
-class WordAlreadyExistsHandler : ResponseEntityExceptionHandler() {
-    @ExceptionHandler(WordAlreadyExistsException::class)
-    fun handleWordAlreadyExists(exception: WordAlreadyExistsException): ResponseEntity<Any> {
+class InvalidWordHandler : ResponseEntityExceptionHandler() {
+    @ExceptionHandler(InvalidWordException::class)
+    fun handleInvalidWord(exception: InvalidWordException): ResponseEntity<Any> {
         val headers = HttpHeaders().also {
             it.contentType = MediaType.APPLICATION_JSON
         }
-        val body = mapOf("error" to "The following words: '${exception.message}' already exists in the data store")
+        val body = mapOf("error" to "${exception.message}")
         return ResponseEntity(body, headers, HttpStatus.UNPROCESSABLE_ENTITY)
     }
 }
 
-class WordAlreadyExistsException(message: String) : RuntimeException(message)
+class InvalidWordException(message: String) : RuntimeException(message)

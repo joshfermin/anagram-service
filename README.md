@@ -118,14 +118,16 @@ Suggestions for documentation topics include:
 - Currently using a H2 in memory db but can easily be swapped for any other relational one via environment configuration.
 - Using flyway to manage the migrations. The migrations that run initially create the table for the 
 anagram words. Then it populates that table with the given dictionary of words.
+- Tests currently run flyway migration scripts to create the schema and seed the db on every test
 
 #### Limit
-- There is currently a hard limit of `1000` on the number of results returned
+- There is currently a limit of `1000` on the number of results returned, unless a limit request parameter is used
 - There is also a limit of `100` on the max length of a word 
 
 #### Edge Cases
 - Any edge cases you find while working on the project
 - Proper nouns, words with uppercase vs lowercase, to solve for this just lowercase the hash
+- Different types of input, i.e. empty lists, words that already exist in the corpus
 
 #### Design Overview
 - The way anagrams are identified is through sorting them by their characters and then

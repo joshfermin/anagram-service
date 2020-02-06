@@ -39,7 +39,7 @@ class AnagramApplicationTests {
                 AnagramRequest(listOf("read", "dear", "dare", "dog", "god", "lake", "leak", "kale"))
             )
         assertThat(createResp.statusCode).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY)
-        assertThat(createResp.body!!).containsSequence("{\"error\":\"The following words: 'dare, dear, dog, god, kale, lake, leak, read' already exists in the data store\"}")
+        assertThat(createResp.body!!).containsSequence("{\"error\":\"The following words: [dare, dear, dog, god, kale, lake, leak, read] already exist in the data store\"}")
 
         val getReadResp = restTemplate
             .getForEntity(
@@ -173,5 +173,16 @@ class AnagramApplicationTests {
 
         assertThat(resp.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(resp.body!!.valid).isEqualTo(true)
+    }
+
+    @Test
+    fun `returns error object if word over 100 characters`() {
+        val createResp = restTemplate
+            .postForEntity<String>(
+                "/words.json",
+                AnagramRequest(listOf("a".repeat(101)))
+            )
+        assertThat(createResp.statusCode).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY)
+        assertThat(createResp.body!!).containsSequence("{\"error\":\"Word you are trying to upload is over the max word length of: 100\"}")
     }
 }
